@@ -1,4 +1,8 @@
-import { IApiConfig, IDatabaseConfig } from '@annio/core/lib/interfaces';
+import {
+  IApiConfig,
+  IDatabaseConfig,
+  IMicroServiceConfig,
+} from '@annio/core/lib/interfaces';
 
 export interface IAppConfig {
   project: {
@@ -11,4 +15,8 @@ export interface IAppConfig {
   };
   database: IDatabaseConfig;
   apiConfig: IApiConfig;
+  services: {
+    order: IMicroServiceConfig;
+    payment: IMicroServiceConfig;
+  };
 }

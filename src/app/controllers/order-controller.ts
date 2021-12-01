@@ -1,32 +1,74 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Inject,
+} from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { BaseController } from '@annio/core/lib/controllers';
+import { ResponseDto } from '@annio/core/lib/dto';
 import { ORDER_ROUTES } from '@app/constants';
-import { OrderService } from '@app/services';
-import { CreateOrderDTO, OrderDTO } from '@app/dto';
-import { ORDER_STATUS } from '@annio/core/lib/interfaces';
+import {
+  CreateOrderDTO,
+  OrderDTO,
+  ORDER_STATUS,
+  ORDER_REQUEST_ACTION,
+} from '@annio/core/lib/business/order.business';
+import { ObservableUtils } from '@annio/core/lib/utils';
+import { AppConfig } from '@app/config';
 
 @ApiTags(ORDER_ROUTES.TAGS)
 @Controller()
 export class OrderController extends BaseController {
-  constructor(private readonly adminService: OrderService) {
+  constructor(
+    @Inject(AppConfig.services.order.key)
+    private readonly orderService: ClientProxy,
+  ) {
     super(OrderController.name);
   }
 
-  @MessagePattern('order_create')
-  async create(body: CreateOrderDTO): Promise<OrderDTO> {
-    const newOrder = await this.adminService.create(body);
-    return new OrderDTO(newOrder);
+  @HttpCode(HttpStatus.OK)
+  @Post(ORDER_ROUTES.CREATE)
+  async create(@Body() body: CreateOrderDTO): Promise<ResponseDto<OrderDTO>> {
+    return this.ApiResponse(
+      HttpStatus.OK,
+      'Create Order Success',
+      async () =>
+        await ObservableUtils.getFirstResponse(
+          this.orderService.send(ORDER_REQUEST_ACTION.CREATE, body),
+        ),
+    );
   }
 
-  @MessagePattern('order_cancel')
-  async cancel(id: string): Promise<boolean> {
-    return await this.adminService.cancel(id);
+  @HttpCode(HttpStatus.OK)
+  @Post(ORDER_ROUTES.CANCEL)
+  async cancel(@Param('id') id: string): Promise<ResponseDto<boolean>> {
+    return this.ApiResponse(
+      HttpStatus.OK,
+      'Cancel Order Success',
+      async () =>
+        await ObservableUtils.getFirstResponse(
+          this.orderService.send(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
+        ),
+    );
   }
 
-  @MessagePattern('order_cancel')
-  async checkOrderStatus(id: string): Promise<ORDER_STATUS> {
-    return await this.adminService.checkStatus(id);
+  @HttpCode(HttpStatus.OK)
+  @Post(ORDER_ROUTES.CHECK_STATUS)
+  async checkOrderStatus(
+    @Param('id') id: string,
+  ): Promise<ResponseDto<ORDER_STATUS>> {
+    return this.ApiResponse(
+      HttpStatus.OK,
+      'Check Order Status Success',
+      async () =>
+        await ObservableUtils.getFirstResponse(
+          this.orderService.send(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
+        ),
+    );
   }
 }

@@ -1,7 +1,10 @@
-import { DATABASE_TYPE } from '@annio/core/lib/interfaces';
-import { IAppConfig } from '@app/interfaces';
-import { readFileSync } from 'fs';
 import * as path from 'path';
+import { readFileSync } from 'fs';
+
+import { IAppConfig } from '@app/interfaces';
+import { Transport } from '@nestjs/microservices';
+import { DATABASE_TYPE } from '@annio/core/lib/interfaces';
+import { MICROSERVICE } from '@app/constants';
 
 export const AppConfig: IAppConfig = {
   project: {
@@ -29,6 +32,28 @@ export const AppConfig: IAppConfig = {
   },
   apiConfig: {
     prefix: process.env.API_PREFIX,
+  },
+  services: {
+    order: {
+      key: MICROSERVICE.ORDER,
+      config: {
+        transport: Transport.TCP,
+        options: {
+          host: process.env.SERVICE_ORDER_HOST,
+          port: +process.env.SERVICE_ORDER_PORT,
+        },
+      },
+    },
+    payment: {
+      key: MICROSERVICE.PAYMENT,
+      config: {
+        transport: Transport.TCP,
+        options: {
+          host: process.env.SERVICE_PAYMENT_HOST,
+          port: +process.env.SERVICE_PAYMENT_PORT,
+        },
+      },
+    },
   },
 };
 
