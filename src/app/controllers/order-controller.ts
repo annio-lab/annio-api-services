@@ -6,19 +6,20 @@ import {
   Param,
   Post,
   Inject,
+  Get,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
-import { BaseController } from '@annio/core/lib/controllers';
-import { ResponseDto } from '@annio/core/lib/dto';
+import { BaseController } from 'annio-core/lib/controllers';
+import { ResponseDto } from 'annio-core/lib/dto';
 import { ORDER_ROUTES } from '@app/constants';
 import {
   CreateOrderDTO,
   OrderDTO,
   ORDER_STATUS,
   ORDER_REQUEST_ACTION,
-} from '@annio/core/lib/business/order.business';
-import { ObservableUtils } from '@annio/core/lib/utils';
+} from 'annio-core/lib/business/order.business';
+import { ObservableUtils } from 'annio-core/lib/utils';
 import { AppConfig } from '@app/config';
 
 @ApiTags(ORDER_ROUTES.TAGS)
@@ -29,6 +30,32 @@ export class OrderController extends BaseController {
     private readonly orderService: ClientProxy,
   ) {
     super(OrderController.name);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get(ORDER_ROUTES.GET_ALL)
+  async getAll(): Promise<ResponseDto<OrderDTO[]>> {
+    return this.ApiResponse(
+      HttpStatus.OK,
+      'Get List Orders Success',
+      async () =>
+        await ObservableUtils.getFirstResponse(
+          this.orderService.send(ORDER_REQUEST_ACTION.GET_ALL, undefined),
+        ),
+    );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get(ORDER_ROUTES.DETAIL)
+  async detail(@Param('id') id: string): Promise<ResponseDto<OrderDTO>> {
+    return this.ApiResponse(
+      HttpStatus.OK,
+      'Get Order Info Success',
+      async () =>
+        await ObservableUtils.getFirstResponse(
+          this.orderService.send(ORDER_REQUEST_ACTION.GET_BY_ID, id),
+        ),
+    );
   }
 
   @HttpCode(HttpStatus.OK)

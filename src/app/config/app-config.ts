@@ -3,7 +3,6 @@ import { readFileSync } from 'fs';
 
 import { IAppConfig } from '@app/interfaces';
 import { Transport } from '@nestjs/microservices';
-import { DATABASE_TYPE } from '@annio/core/lib/interfaces';
 import { MICROSERVICE } from '@app/constants';
 
 export const AppConfig: IAppConfig = {
@@ -14,21 +13,6 @@ export const AppConfig: IAppConfig = {
     name: process.env.NODE_ENV || 'development',
     port: process.env.PORT ? +process.env.PORT : 5000,
     protocol: process.env.PROTOCOL === 'https' ? 'https' : 'http',
-  },
-  database: {
-    type: DATABASE_TYPE.MYSQL,
-    env: {
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      databaseName: process.env.DB_NAME,
-    },
-    entities: [__dirname + './../entities/*.entity{.ts,.js}'],
-    migrations: [__dirname + './../migrations/*.ts'],
-    options: {
-      connectionLimit: 10,
-    },
   },
   apiConfig: {
     prefix: process.env.API_PREFIX,

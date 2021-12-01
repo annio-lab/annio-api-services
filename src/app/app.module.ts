@@ -1,13 +1,11 @@
 import {
   Module,
   DynamicModule,
-  Logger,
   NestModule,
   MiddlewareConsumer,
 } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { TypeOrmConfigModule } from '@annio/core/lib/modules';
-import { BodyParserMiddleware } from '@annio/core/lib/middlewares';
+import { BodyParserMiddleware } from 'annio-core/lib/middlewares';
 import { OrderController } from './controllers';
 import { IAppConfig } from './interfaces';
 
@@ -16,7 +14,7 @@ export class AppModule implements NestModule {
   static forRoot(config: IAppConfig): DynamicModule {
     return {
       module: AppModule,
-      imports: [TypeOrmConfigModule.forRoot(config.database, new Logger('DB'))],
+      imports: [],
       controllers: [OrderController],
       providers: [
         {

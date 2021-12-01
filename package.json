@@ -1,8 +1,8 @@
 {
-  "name": "annio-order-service",
-  "displayName": "Annio Order Service",
+  "name": "annio-api-services",
+  "displayName": "Annio API Services",
   "version": "1.0.0",
-  "description": "Annio Order Service",
+  "description": "Annio API Services",
   "author": {
     "name": "Bill Tran",
     "email": "tvkhue96@gmail.com"
@@ -10,9 +10,6 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "migrate:create": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:create -n",
-    "migrate:revert": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert",
-    "migrate": "cross-env MIGRATIONS=true ./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "prebuild": "rimraf dist",
@@ -36,7 +33,6 @@
     "nest:upgrade": "nest update -f -t latest"
   },
   "dependencies": {
-    "@annio/core": "https://github.com/annio-lab/annio-core.git",
     "@nestjs/common": "6.10.14",
     "@nestjs/core": "6.10.14",
     "@nestjs/jwt": "6.1.1",
@@ -44,7 +40,7 @@
     "@nestjs/passport": "6.1.1",
     "@nestjs/platform-express": "6.10.14",
     "@nestjs/swagger": "4.1.7",
-    "@nestjs/typeorm": "6.2.0",
+    "annio-core": "https://github.com/annio-lab/annio-core.git",
     "class-transformer": "0.3.1",
     "class-validator": "0.11.0",
     "cli-highlight": "2.1.1",
@@ -58,10 +54,7 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.0",
     "rxjs": "7.1.0",
-    "swagger-ui-express": "4.1.2",
-    "typeorm": "0.2.25",
-    "uuid": "3.3.3",
-    "xss": "1.0.6"
+    "swagger-ui-express": "4.1.2"
   },
   "devDependencies": {
     "@nestjs/cli": "6.13.1",
