@@ -10,7 +10,6 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "preinstall": "npm i -g @nestjs/cli",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "prebuild": "rimraf dist",
