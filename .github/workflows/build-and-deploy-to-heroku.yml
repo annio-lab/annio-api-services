@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Clone source code
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       - name: Build, Push and Release a Docker container to Heroku.
         uses: gonuit/heroku-docker-deploy@v1.3.3
