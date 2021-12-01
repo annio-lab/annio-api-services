@@ -12,9 +12,9 @@ export class ORDER_ROUTES {
     return destinationPath;
   }
   //
-  static GET_ALL = this.GeneratePath();
-  static DETAIL = this.GeneratePath(':id/detail');
-  static CREATE = this.GeneratePath('create');
-  static CANCEL = this.GeneratePath(':id/cancel');
-  static CHECK_STATUS = this.GeneratePath(':id/check-status');
+  static GET_ALL = ORDER_ROUTES.GeneratePath();
+  static DETAIL = ORDER_ROUTES.GeneratePath(':id/detail');
+  static CREATE = ORDER_ROUTES.GeneratePath('create');
+  static CANCEL = ORDER_ROUTES.GeneratePath(':id/cancel');
+  static CHECK_STATUS = ORDER_ROUTES.GeneratePath(':id/check-status');
 }
