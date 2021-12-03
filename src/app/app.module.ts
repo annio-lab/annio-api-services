@@ -5,7 +5,7 @@ import {
   MiddlewareConsumer,
 } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { BodyParserMiddleware } from '@annio/core/lib/middlewares';
+import { BodyParserMiddleware } from '@annio/core/middlewares';
 import { OrderController } from './controllers';
 import { IAppConfig } from './interfaces';
 
