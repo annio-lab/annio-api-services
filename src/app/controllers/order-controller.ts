@@ -5,29 +5,20 @@ import {
   HttpStatus,
   Param,
   Post,
-  Inject,
   Get,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { BaseController } from '@annio/core/controllers';
 import { ResponseDto } from '@annio/core/dto';
 import { ORDER_ROUTES } from '@app/constants';
-import {
-  ORDER_STATUS,
-  ORDER_REQUEST_ACTION,
-} from '@annio/core/business/order/order.common';
+import { ORDER_STATUS } from '@annio/core/business/order/order.common';
 import { OrderDTO, CreateOrderDTO } from '@annio/core/business/order/order.dto';
-import { ObservableUtils } from '@annio/core/utils';
-import { AppConfig } from '@app/config';
+import { OrderService } from '@app/services';
 
 @ApiTags(ORDER_ROUTES.TAGS)
 @Controller()
 export class OrderController extends BaseController {
-  constructor(
-    @Inject(AppConfig.services.order.key)
-    private readonly orderService: ClientProxy,
-  ) {
+  constructor(private readonly orderService: OrderService) {
     super(OrderController.name);
   }
 
@@ -37,10 +28,10 @@ export class OrderController extends BaseController {
     return this.ApiResponse(
       HttpStatus.OK,
       'Get List Orders Success',
-      async () =>
-        await ObservableUtils.getFirstResponse(
-          this.orderService.emit(ORDER_REQUEST_ACTION.GET_ALL, {}),
-        ),
+      async () => {
+        const response = await this.orderService.getAll();
+        return response;
+      },
     );
   }
 
@@ -50,37 +41,30 @@ export class OrderController extends BaseController {
     return this.ApiResponse(
       HttpStatus.OK,
       'Get Order Info Success',
-      async () =>
-        await ObservableUtils.getFirstResponse(
-          this.orderService.emit(ORDER_REQUEST_ACTION.GET_BY_ID, id),
-        ),
+      async () => {
+        const response = await this.orderService.getById(id);
+        this.logger.log(response);
+        return response;
+      },
     );
   }
 
   @HttpCode(HttpStatus.OK)
   @Post(ORDER_ROUTES.CREATE)
   async create(@Body() body: CreateOrderDTO): Promise<ResponseDto<OrderDTO>> {
-    return this.ApiResponse(
-      HttpStatus.OK,
-      'Create Order Success',
-      async () =>
-        await ObservableUtils.getFirstResponse(
-          this.orderService.emit(ORDER_REQUEST_ACTION.CREATE, body),
-        ),
-    );
+    return this.ApiResponse(HttpStatus.OK, 'Create Order Success', async () => {
+      const response = await this.orderService.create(body);
+      return response;
+    });
   }
 
   @HttpCode(HttpStatus.OK)
   @Post(ORDER_ROUTES.CANCEL)
   async cancel(@Param('id') id: string): Promise<ResponseDto<boolean>> {
-    return this.ApiResponse(
-      HttpStatus.OK,
-      'Cancel Order Success',
-      async () =>
-        await ObservableUtils.getFirstResponse(
-          this.orderService.emit(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
-        ),
-    );
+    return this.ApiResponse(HttpStatus.OK, 'Cancel Order Success', async () => {
+      const response = await this.orderService.cancel(id);
+      return response;
+    });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -91,10 +75,10 @@ export class OrderController extends BaseController {
     return this.ApiResponse(
       HttpStatus.OK,
       'Check Order Status Success',
-      async () =>
-        await ObservableUtils.getFirstResponse(
-          this.orderService.emit(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
-        ),
+      async () => {
+        const response = await this.orderService.checkStatus(id);
+        return response;
+      },
     );
   }
 }
