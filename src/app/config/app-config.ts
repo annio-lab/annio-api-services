@@ -21,20 +21,26 @@ export const AppConfig: IAppConfig = {
     order: {
       key: MICROSERVICE.ORDER,
       config: {
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          host: process.env.SERVICE_ORDER_HOST,
-          port: +process.env.SERVICE_ORDER_PORT,
+          urls: [process.env.SERVICE_ORDER_RMQ_URL],
+          queue: process.env.SERVICE_ORDER_RMQ_QUEUE,
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     },
     payment: {
       key: MICROSERVICE.PAYMENT,
       config: {
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          host: process.env.SERVICE_PAYMENT_HOST,
-          port: +process.env.SERVICE_PAYMENT_PORT,
+          urls: [process.env.SERVICE_PAYMENT_RMQ_URL],
+          queue: process.env.SERVICE_PAYMENT_RMQ_QUEUE,
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     },

@@ -39,7 +39,7 @@ export class OrderController extends BaseController {
       'Get List Orders Success',
       async () =>
         await ObservableUtils.getFirstResponse(
-          this.orderService.send(ORDER_REQUEST_ACTION.GET_ALL, 1),
+          this.orderService.emit(ORDER_REQUEST_ACTION.GET_ALL, {}),
         ),
     );
   }
@@ -52,7 +52,7 @@ export class OrderController extends BaseController {
       'Get Order Info Success',
       async () =>
         await ObservableUtils.getFirstResponse(
-          this.orderService.send(ORDER_REQUEST_ACTION.GET_BY_ID, id),
+          this.orderService.emit(ORDER_REQUEST_ACTION.GET_BY_ID, id),
         ),
     );
   }
@@ -65,7 +65,7 @@ export class OrderController extends BaseController {
       'Create Order Success',
       async () =>
         await ObservableUtils.getFirstResponse(
-          this.orderService.send(ORDER_REQUEST_ACTION.CREATE, body),
+          this.orderService.emit(ORDER_REQUEST_ACTION.CREATE, body),
         ),
     );
   }
@@ -78,7 +78,7 @@ export class OrderController extends BaseController {
       'Cancel Order Success',
       async () =>
         await ObservableUtils.getFirstResponse(
-          this.orderService.send(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
+          this.orderService.emit(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
         ),
     );
   }
@@ -93,7 +93,7 @@ export class OrderController extends BaseController {
       'Check Order Status Success',
       async () =>
         await ObservableUtils.getFirstResponse(
-          this.orderService.send(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
+          this.orderService.emit(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
         ),
     );
   }
