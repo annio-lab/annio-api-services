@@ -8,6 +8,7 @@ import { ClientProxyFactory } from '@nestjs/microservices';
 import { BodyParserMiddleware } from '@annio/core/middlewares';
 import { OrderController } from './controllers';
 import { IAppConfig } from './interfaces';
+import { OrderService } from './services/order.service';
 
 @Module({})
 export class AppModule implements NestModule {
@@ -17,15 +18,11 @@ export class AppModule implements NestModule {
       imports: [],
       controllers: [OrderController],
       providers: [
+        OrderService,
         {
           provide: config.services.order.key,
           useFactory: () =>
             ClientProxyFactory.create(config.services.order.config),
-        },
-        {
-          provide: config.services.payment.key,
-          useFactory: () =>
-            ClientProxyFactory.create(config.services.payment.config),
         },
       ],
     };
