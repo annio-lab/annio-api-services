@@ -4,7 +4,7 @@ import {
   NestModule,
   MiddlewareConsumer,
 } from '@nestjs/common';
-import { ClientProxyFactory } from '@nestjs/microservices';
+import { ClientsModule } from '@nestjs/microservices';
 import { BodyParserMiddleware } from '@annio/core/middlewares';
 import { OrderController } from './controllers';
 import { IAppConfig } from './interfaces';
@@ -15,16 +15,16 @@ export class AppModule implements NestModule {
   static forRoot(config: IAppConfig): DynamicModule {
     return {
       module: AppModule,
-      imports: [],
-      controllers: [OrderController],
-      providers: [
-        OrderService,
-        {
-          provide: config.services.order.key,
-          useFactory: () =>
-            ClientProxyFactory.create(config.services.order.config),
-        },
+      imports: [
+        ClientsModule.register([
+          {
+            name: config.services.order.key,
+            ...config.services.order.config,
+          },
+        ]),
       ],
+      controllers: [OrderController],
+      providers: [OrderService],
     };
   }
 
