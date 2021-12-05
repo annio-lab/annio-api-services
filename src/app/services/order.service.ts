@@ -22,31 +22,31 @@ export class OrderService extends BaseService {
 
   public async getAll(): Promise<IOrder[]> {
     return await ObservableUtils.getFirstResponse(
-      this.client.emit(ORDER_REQUEST_ACTION.GET_ALL, {}),
+      this.client.send(ORDER_REQUEST_ACTION.GET_ALL, {}),
     );
   }
 
   public async getById(id: string): Promise<IOrder> {
     return await ObservableUtils.getFirstResponse(
-      this.client.emit(ORDER_REQUEST_ACTION.GET_BY_ID, id),
+      this.client.send(ORDER_REQUEST_ACTION.GET_BY_ID, id),
     );
   }
 
   public async create(body: CreateOrderDTO): Promise<IOrder> {
     return await ObservableUtils.getFirstResponse(
-      this.client.emit(ORDER_REQUEST_ACTION.CREATE, body),
+      this.client.send(ORDER_REQUEST_ACTION.CREATE, body),
     );
   }
 
   public async cancel(id: string): Promise<boolean> {
     return await ObservableUtils.getFirstResponse(
-      this.client.emit(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
+      this.client.send(ORDER_REQUEST_ACTION.CANCEL_BY_ID, id),
     );
   }
 
   public async checkStatus(id: string): Promise<OrderDTO> {
     return await ObservableUtils.getFirstResponse(
-      this.client.emit(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
+      this.client.send(ORDER_REQUEST_ACTION.CHECK_STATUS_BY_ID, id),
     );
   }
 }
